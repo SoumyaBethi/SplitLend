@@ -25,4 +25,6 @@ public class AddExpenseDto {
     private SplitType splitType;
 
     HashMap<Long, Double> Splitss = new HashMap<>();
+
+    private Long GroupId;
 }

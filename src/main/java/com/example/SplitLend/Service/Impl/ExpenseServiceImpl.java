@@ -12,8 +12,10 @@ import com.example.SplitLend.Dto.ExpenseDetailResponseDto;
 import com.example.SplitLend.Dto.ExpenseResponseDto;
 import com.example.SplitLend.Entity.Expense;
 import com.example.SplitLend.Entity.ExpenseDetailList;
+import com.example.SplitLend.Entity.Group;
 import com.example.SplitLend.Entity.User;
 import com.example.SplitLend.Repository.ExpenseRepository;
+import com.example.SplitLend.Repository.GroupRepository;
 import com.example.SplitLend.Repository.UserRepository;
 import com.example.SplitLend.Service.ExpenseService;
 
@@ -26,6 +28,7 @@ public class ExpenseServiceImpl implements ExpenseService{
 
     private final ExpenseRepository expenseRepository;
     private final UserRepository userRepository;
+    private final GroupRepository groupRepository;
 
 
     @Override
@@ -36,6 +39,8 @@ public class ExpenseServiceImpl implements ExpenseService{
         Long PaidBy = addExpenseDto.getPaidBy();
         Double Amount = addExpenseDto.getAmountPaid();
         Double Sum = 0.0;
+
+        Long GroupId = addExpenseDto.getGroupId();
 
         User MainUser = userRepository.findById(PaidBy)
                     .orElseThrow(() -> new RuntimeException("User not found"));
@@ -81,6 +86,12 @@ public class ExpenseServiceImpl implements ExpenseService{
                 });
  
                 newExpense.setExpenseDetail(list);
+
+                if(GroupId != 0){
+
+                    Group group = groupRepository.findById(GroupId).orElseThrow(() -> new RuntimeException("Group not found"));
+                    newExpense.setGroup(group);
+                }
                 expenseRepository.save(newExpense);
 
                 return mappToResponse(newExpense);
@@ -134,6 +145,7 @@ public class ExpenseServiceImpl implements ExpenseService{
         expenseResponseDto.setDescription(expense.getDescription());
         expenseResponseDto.setPaidBy(expense.getPaidBy().getId());
         expenseResponseDto.setSplitType(expense.getSplitType());
+        expenseResponseDto.setGroupId(expense.getGroup().getId());
 
         List<ExpenseDetailList> splits = expense.getExpenseDetail();
         List<ExpenseDetailResponseDto> expenseDetail = new ArrayList<>();

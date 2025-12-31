@@ -24,4 +24,6 @@ public class ExpenseResponseDto {
     private SplitType splitType;
 
     List<ExpenseDetailResponseDto> expenseDetail;
+
+    private Long GroupId;
 }

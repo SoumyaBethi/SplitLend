@@ -8,9 +8,7 @@ public interface GroupService {
 
     CreateGroupResponseDto createGroup(CreateGroupRequestDto createGroupRequestDto);
 
-    
     CreateGroupResponseDto getGroupById(Long id);
-
 
     void deleteGroupById(Long id);
 }
